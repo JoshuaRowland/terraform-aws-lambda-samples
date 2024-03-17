@@ -1,0 +1,42 @@
+name: version
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: determine-version
+        id: semver
+        uses: paulhatch/semantic-version@v5.2.1
+        with:
+          tag_prefix: "v"
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          version_format: "${major}.${minor}.${patch}"
+
+      - name: tag-commit
+        run: |
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+          version="${{ steps.semver.outputs.version }}"
+          tag="v$version"
+          old_tag=$(git tag -l $tag)
+
+          if [ ! -z $old_tag ]; then
+              git tag -d $tag
+              git push origin :refs/tags/$tag
+          fi
+
+          git tag -a $tag -m "Tagged by ${{ github.workflow }} workflow."
+          git push origin $tag

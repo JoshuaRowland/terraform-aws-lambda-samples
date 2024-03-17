@@ -1,0 +1,27 @@
+﻿# Ignore directories
+**/.sentinel/*
+**/.terraform/*
+**/.vagrant/*
+**/.vscode/*
+
+# Ignore Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+*.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+*_override.tf
+*_override.tf.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+.terraformrc
+terraform.rc
+
+# Ignore generated archive-files.
+*.zip
+
+# Ignore Mac .DS_Store files
+.DS_Store
